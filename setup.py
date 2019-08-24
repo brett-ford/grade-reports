@@ -57,41 +57,42 @@ def run_setup(c, data):
                 print('Headers')
 
                 # Share file with student and adviser.
-                # def callback(request_id, response, exception):
-                #     if exception:
-                #         # Handle error
-                #         print(exception)
-                #     else:
-                #         print("Permission Id: {}".format(response.get('id')))
-                #
-                # try:
-                #     drive_service = build('drive', 'v3', credentials=c)
-                #     batch = drive_service.new_batch_http_request(callback=callback)
-                #     student_permission = {'type': 'user', 'role': 'reader', 'emailAddress': student_email}
-                #     adviser_permission = {'type': 'user', 'role': 'reader', 'emailAddress': adviser_email}
-                #     batch.add(drive_service.permissions().create(fileId=ss_id,
-                #                                                  body=student_permission,
-                #                                                  fields='id'))
-                #     batch.add(drive_service.permissions().create(fileId=ss_id,
-                #                                                  body=adviser_permission,
-                #                                                  fields='id'))
-                #     batch.execute()
-                # except Exception as e:
-                #     print('Not shared: {}, {}.'.format(student_email, adviser_email))
-                #     print(e)
-                # else:
-                #     print('Shared: {}, {}.'.format(student_email, adviser_email))
+                def callback(request_id, response, exception):
+                    print(request_id)
+                    if exception:
+                        # Handle error
+                        print(exception)
+                    else:
+                        print("Permission Id: {}".format(response.get('id')))
 
-                # Creates csv file to store contact info.
                 try:
-                    with open('storage.csv', 'a') as storage:
-                        writer = csv.writer(storage)
-                        writer.writerow([student_email, adviser_email, ss_id])
+                    drive_service = build('drive', 'v3', credentials=c)
+                    batch = drive_service.new_batch_http_request(callback=callback)
+                    student_permission = {'type': 'user', 'role': 'reader', 'emailAddress': student_email}
+                    adviser_permission = {'type': 'user', 'role': 'reader', 'emailAddress': adviser_email}
+                    batch.add(drive_service.permissions().create(fileId=ss_id,
+                                                                 body=student_permission,
+                                                                 fields='id'))
+                    batch.add(drive_service.permissions().create(fileId=ss_id,
+                                                                 body=adviser_permission,
+                                                                 fields='id'))
+                    batch.execute()
                 except Exception as e:
-                    print('Not added to storage: {}'.format(student_email))
+                    print('Not shared: {}, {}.'.format(student_email, adviser_email))
                     print(e)
                 else:
-                    print('Storage')
+                    print('Shared: {}, {}.'.format(student_email, adviser_email))
+
+                # Creates csv file to store contact info.
+                    try:
+                        with open('storage.csv', 'a') as storage:
+                            writer = csv.writer(storage)
+                            writer.writerow([student_email, adviser_email, ss_id])
+                    except Exception as e:
+                        print('Not added to storage: {}'.format(student_email))
+                        print(e)
+                    else:
+                        print('Storage')
         print()
 
 
