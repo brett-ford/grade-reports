@@ -8,7 +8,7 @@ from schedule import Schedule
 
 
 class Data(Schedule):
-    """Creates a data object after reading information from the gradebooks."""
+    """Creates a data object after reading information from the grade books."""
 
     ss_range = 'Summary!B3:V40'  # Spreadsheet range
     schedule = Schedule().mb_2019_2020  # dictionary of course names and spreadsheet ids.
@@ -17,6 +17,7 @@ class Data(Schedule):
                     'Grade', 'Period', 'ISP', 'Current 1', 'Current 2', 'Interim 1',
                     'Quarter 1', 'Interim 2', 'Exam 1', 'Semester 1', 'Interim 3',
                     'Quarter 3', 'Interim 4', 'Exam 2', 'Semester 2', 'Final']
+
     report_headers = ['Time Stamp', 'First', 'Last', 'Course', 'Semester', 'Letter',
                       'Current 1', 'Current 2',
                       'Interim 1', 'Quarter 1', 'Interim 2', 'Exam 1', 'Semester 1',
@@ -31,11 +32,10 @@ class Data(Schedule):
             self.student_data = d  # Pandas DataFrame
 
     def get_data(self, c):
-        print('Reading...')
+        print('Reading grade books...')
         grades = []  # Array to hold the grades
 
-        # Call the Sheets API
-        service = build('sheets', 'v4', credentials=c)
+        service = build('sheets', 'v4', credentials=c)  # Call the Sheets API
         sheet = service.spreadsheets()
 
         for course in self.schedule:
@@ -47,7 +47,6 @@ class Data(Schedule):
                 print('Did not read: {}'.format(course))
                 print(e)
             else:
-                # Read data
                 if not values:
                     print('No data found: {}'.format(course))
                 else:
@@ -59,7 +58,11 @@ class Data(Schedule):
         return data  # Pandas DataFrame
 
 
-if __name__ == '__main__':
-    # Test code
+def test():
+    """Test for data.py"""
     test_credentials = get_credentials()
-    test_data = Data(test_credentials)
+    Data(test_credentials)
+
+
+if __name__ == '__main__':
+    test()

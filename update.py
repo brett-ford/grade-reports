@@ -8,19 +8,17 @@ import setup
 from data import Data
 
 
-"""
-Update the existing spreadsheets with the latest grade reports. 
-"""
+"""Update the existing spreadsheets with the latest grade reports."""
 
 
 def update_spreadsheets(c, data):
-    # Sends a grade report to students and advisers.
+    """Sends a grade report to students and advisers."""
 
-    print('Reporting...')
+    print('Running grade reports...')
     new_students(c, data.student_data)  # Check for new students first
 
     # Read storage.csv and create a dictionary.
-    id_table = {}
+    id_table = {}  # Dictionary of tuples.
     with open('storage.csv', 'r') as storage:
         reader = csv.reader(storage)
         for row in reader:
@@ -51,13 +49,12 @@ def update_spreadsheets(c, data):
             print('Not updated: {}'.format(student_data.loc[s]['Student Email']))
             print(e)
         else:
-            # print to verify success.
-            print(values)
+            print(values)  # Verify success.
             print('{} cells appended.'.format(result.get('updates').get('updatedCells')))
 
 
 def new_students(c, data):
-    # Checks data for new students.
+    """Checks data for new students."""
     print('New students...')
 
     # Creates list of existing students.
@@ -84,7 +81,7 @@ def new_students(c, data):
 
 
 def get_letter(grade):
-    # Determines the letter equivalent of the current grade.
+    """Determines the letter equivalent of the current grade."""
     grade = int(grade)
     letters = {range(90, 93): 'A-', range(93, 97): 'A', range(97, 110): 'A+',
                range(80, 83): 'B-', range(83, 87): 'B', range(87, 90): 'B+',
@@ -98,17 +95,15 @@ def get_letter(grade):
 
 
 def get_semester(date):
-    # Determines the current semester.
+    """Determines the current semester."""
     semester_2_start = dt(2020, 1, 22)
     if date > semester_2_start:
         return 'Second'
-    else:
-        return 'First'
+    return 'First'
 
 
 def remove_students():
-    # Removes a student when they drop the course.
-
+    """Removes a student when they drop the course."""
     # Remove sharing
     # Delete spreadsheet
     # Delete student info from storage.csv
