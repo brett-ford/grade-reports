@@ -11,7 +11,6 @@ class Data(Schedule):
     """Creates a data object after reading information from the grade books."""
 
     ss_range = 'Summary!B3:V40'  # Spreadsheet range
-    schedule = Schedule().mb_2019_2020  # dictionary of course names and spreadsheet ids.
 
     data_headers = ['First', 'Last', 'Course', 'Student Email', 'Advisor Email',
                     'Grade', 'Period', 'ISP', 'Current 1', 'Current 2', 'Interim 1',
@@ -25,6 +24,7 @@ class Data(Schedule):
                       'Final']
 
     def __init__(self, c, d=None):
+        Schedule.__init__(self)
         self.date = dt.today()
         if d is None:
             self.student_data = self.get_data(c)
@@ -38,8 +38,8 @@ class Data(Schedule):
         service = build('sheets', 'v4', credentials=c)  # Call the Sheets API
         sheet = service.spreadsheets()
 
-        for course in self.schedule:
-            ss_id = self.schedule[course]  # Spreadsheet ID
+        for course in self.mb_2019_2020:
+            ss_id = self.mb_2019_2020[course]  # Spreadsheet ID
             try:
                 result = sheet.values().get(spreadsheetId=ss_id, range=self.ss_range).execute()
                 values = result.get('values', [])
