@@ -5,8 +5,8 @@ one for each course I teach, to store grades. Since it's important for students 
 regular grade updates are helpful but time consuming. Previously, students needed to ask for their grades, either in,
 either in person or via email. 
 
-This project allows me to send grade updates to all students by running one script. The app consistes of two processes.
-The setup process reads my gradebooks through the Google Sheets API and creates, shares, and inserts headers for each 
-student listed in the gradebook. The update process reads my gradebooks and inserts a new line in each student's sheet. 
+This project allows me to send grade updates to all students by running one script. The app consists of two processes.
+The setup process reads my grade books through the Google Sheets API and creates, shares, and inserts headers for each 
+student listed in the grade book. The update process reads my grade books and inserts a new line in each student's sheet. 
 The update includes the student's current grade in addition to all significant milestone grades such as quarter and
 semester grades.
