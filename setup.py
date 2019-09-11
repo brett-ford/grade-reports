@@ -78,10 +78,10 @@ def run_setup(c, data):
                                                                  fields='id'))
                     batch.execute()
                 except Exception as e:
-                    print('Not shared: {}, {}.'.format(student_email, adviser_email))
+                    print('Not shared: {}, {}'.format(student_email, adviser_email))
                     print(e)
                 else:
-                    print('Shared: {}, {}.'.format(student_email, adviser_email))
+                    print('Shared: {}, {}'.format(student_email, adviser_email))
 
                 # Creates csv file to store contact info.
                     try:

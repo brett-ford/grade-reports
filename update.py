@@ -75,6 +75,7 @@ def new_students(c, data):
 
     if len(new.student_data) > 0:
         print('New students found.')
+        print(new)
         setup.run_setup(c, new)
     else:
         print('No new students.')
