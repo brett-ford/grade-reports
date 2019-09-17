@@ -7,7 +7,6 @@ from google.auth.transport.requests import Request
 
 def get_credentials():
     """Returns credentials for accessing a Google account"""
-
     scopes = ['https://www.googleapis.com/auth/spreadsheets',
               'https://www.googleapis.com/auth/drive.file']
 

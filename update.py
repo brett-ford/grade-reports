@@ -1,7 +1,6 @@
 import csv
 from datetime import datetime as dt
 
-# import pandas as pd
 from googleapiclient.discovery import build
 
 import setup
@@ -13,26 +12,27 @@ from data import Data
 
 def update_spreadsheets(c, data):
     """Sends a grade report to students and advisers."""
-
     print('Running grade reports...')
-    new_students(c, data.student_data)  # Check for new students first
-
-    # Read storage.csv and create a dictionary.
-    id_table = {}  # Dictionary of tuples.
-    with open('storage.csv', 'r') as storage:
-        reader = csv.reader(storage)
-        for row in reader:
-            id_table[row[0]] = (row[1], row[2])
 
     student_data = data.student_data  # DataFrame only
     time_stamp = data.date.strftime('%Y-%m-%d %H:%M:%S')
     semester = get_semester(data.date)
     index = (lambda i: -13 if semester == 'First' else -12)(semester)
-    service = build('sheets', 'v4', credentials=c)
+
+    new_students(c, student_data)  # Check for new students first
+
+    # Read storage.csv and create a dictionary of existing students.
+    existing_students = {}  # Dictionary of tuples.
+    with open('storage.csv', 'r') as storage:
+        reader = csv.reader(storage)
+        for row in reader:
+            existing_students[row[0]] = (row[1], row[2])
+
+    service = build('sheets', 'v4', credentials=c)  # Call the Sheets API.
 
     # Update each student's sheet with current grade information.
     for s in student_data.index:
-        spreadsheet_id = id_table[student_data.loc[s]['Student Email']][1]
+        spreadsheet_id = existing_students[student_data.loc[s]['Student Email']][1]
 
         values = [[time_stamp] +
                   student_data.iloc[s, :3].tolist() +
@@ -71,7 +71,7 @@ def new_students(c, data):
 
     # Reduces DataFrame to new students only.
     new_data = data[data['Student Email'].apply(mask)]
-    new = Data(c, d=new_data)
+    new = Data(c, d=new_data)  # TODO: passing credentials is redundant here.
 
     if len(new.student_data) > 0:
         print('New students found.')

@@ -33,25 +33,29 @@ class Data(Schedule):
 
     def get_data(self, c):
         print('Reading grade books...')
-        grades = []  # Array to hold the grades
+        schedule = self.mb_2019_2020
+        grades = []  # Array to hold the grades.
+        used_ids = []  # Array to hold grade book ids.
 
         service = build('sheets', 'v4', credentials=c)  # Call the Sheets API
         sheet = service.spreadsheets()
 
-        for course in self.mb_2019_2020:
-            ss_id = self.mb_2019_2020[course]  # Spreadsheet ID
-            try:
-                result = sheet.values().get(spreadsheetId=ss_id, range=self.ss_range).execute()
-                values = result.get('values', [])
-            except Exception as e:
-                print('Did not read: {}'.format(course))
-                print(e)
-            else:
-                if not values:
-                    print('No data found: {}'.format(course))
+        for period in schedule:
+            ss_id = schedule[period]['source_id']  # Source spreadsheet id
+            if ss_id not in used_ids:
+                try:
+                    result = sheet.values().get(spreadsheetId=ss_id, range=self.ss_range).execute()
+                    values = result.get('values', [])
+                except Exception as e:
+                    print('Did not read: {}'.format(schedule[period]['title']))
+                    print(e)
                 else:
-                    for row in values:
-                        grades.append(row)
+                    if not values:
+                        print('No data found: {}'.format(schedule[period]['title']))
+                    else:
+                        used_ids.append(ss_id)
+                        for row in values:
+                            grades.append(row)
 
         data = pd.DataFrame(grades, columns=self.data_headers)
         print(data)

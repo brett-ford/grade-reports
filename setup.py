@@ -9,7 +9,7 @@ from data import Data
 Create a Google Sheet for each student.
 Add headers to each sheet. 
 Share the sheet with the student and adviser.
-Run once per school year.
+Add student email, advisor email, and spreadsheet id to storage.csv
 """
 
 
@@ -18,8 +18,7 @@ def run_setup(c, data):
     print('Setup...')
     student_data = data.student_data  # DataFrame only
 
-    # Call the Sheets API
-    service = build('sheets', 'v4', credentials=c)
+    service = build('sheets', 'v4', credentials=c)  # Call the Sheets API
 
     for s in student_data.index:
         # Create a sheet for the student.
