@@ -1,4 +1,5 @@
 import csv
+import time
 from datetime import datetime as dt
 
 from googleapiclient.discovery import build
@@ -32,6 +33,7 @@ def update_spreadsheets(c, data):
 
     # Update each student's sheet with current grade information.
     for s in student_data.index:
+        time.sleep(3)
         spreadsheet_id = existing_students[student_data.loc[s]['Student Email']][1]
 
         values = [[time_stamp] +
@@ -49,7 +51,7 @@ def update_spreadsheets(c, data):
             print('Not updated: {}'.format(student_data.loc[s]['Student Email']))
             print(e)
         else:
-            print(values)  # Verify success.
+            print(values[0])  # Verify success.
             print('{} cells appended.'.format(result.get('updates').get('updatedCells')))
 
 
@@ -75,7 +77,7 @@ def new_students(c, data):
 
     if len(new.student_data) > 0:
         print('New students found.')
-        print(new)
+        print(new.student_data)
         setup.run_setup(c, new)
     else:
         print('No new students.')

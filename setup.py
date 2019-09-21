@@ -57,12 +57,11 @@ def run_setup(c, data):
 
                 # Share file with student and adviser.
                 def callback(request_id, response, exception):
-                    print(request_id)
                     if exception:
-                        # Handle error
-                        print(exception)
+                        print(exception)  # Handle error.
                     else:
-                        print("Permission Id: {}".format(response.get('id')))
+                        print("Request ID: {}".format(request_id))
+                        print("Permission ID: {}".format(response.get('id')))
 
                 try:
                     drive_service = build('drive', 'v3', credentials=c)
@@ -84,7 +83,7 @@ def run_setup(c, data):
 
                 # Creates csv file to store contact info.
                     try:
-                        with open('storage.csv', 'a') as storage:
+                        with open('storage.csv', 'a', newline='') as storage:
                             writer = csv.writer(storage)
                             writer.writerow([student_email, adviser_email, ss_id])
                     except Exception as e:
