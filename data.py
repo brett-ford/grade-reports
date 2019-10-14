@@ -3,7 +3,7 @@ from datetime import datetime as dt
 import pandas as pd
 from googleapiclient.discovery import build
 
-from authenticate import get_credentials
+from authenticate import Authenticate
 from schedule import Schedule
 
 
@@ -23,37 +23,37 @@ class Data(Schedule):
                       'Interim 3', 'Quarter 3', 'Interim 4', 'Exam 2', 'Semester 2',
                       'Final']
 
-    def __init__(self, c, d=None):
-        Schedule.__init__(self)
+    def __init__(self, df=None):
         self.date = dt.today()
-        if d is None:
-            self.student_data = self.get_data(c)
+        self.credentials = Authenticate.get_credentials()
+        if df is None:
+            self.student_data = self.get_data()
         else:
-            self.student_data = d  # Pandas DataFrame
+            self.student_data = df  # Pandas DataFrame
 
-    def get_data(self, c):
+    def get_data(self):
         print('Reading grade books...')
-        schedule = self.schedules['2019_2020']
         grades = []  # Array to hold the grades.
-        used_ids = []  # Array to hold grade book ids.
+        course_titles = []  # Array to hold course codes.
 
-        service = build('sheets', 'v4', credentials=c)  # Call the Sheets API
+        service = build('sheets', 'v4', credentials=self.credentials)  # Call the Sheets API
         sheet = service.spreadsheets()
 
-        for period in schedule:
-            ss_id = schedule[period]['source_id']  # Source spreadsheet id
-            if ss_id not in used_ids:
+        for period in self.schedules['2019_2020']:
+            title = self.schedules['2019_2020'][period]['title']  # Course title
+            gb_id = self.schedules['2019_2020'][period]['gradebook_id']  # Gradebook id
+            if title not in course_titles:
                 try:
-                    result = sheet.values().get(spreadsheetId=ss_id, range=self.ss_range).execute()
+                    result = sheet.values().get(spreadsheetId=gb_id, range=self.ss_range).execute()
                     values = result.get('values', [])
                 except Exception as e:
-                    print('Did not read: {}'.format(schedule[period]['title']))
+                    print('Did not read: {}'.format(title))
                     print(e)
                 else:
                     if not values:
-                        print('No data found: {}'.format(schedule[period]['title']))
+                        print('No data found: {}'.format(title))
                     else:
-                        used_ids.append(ss_id)
+                        course_titles.append(title)
                         for row in values:
                             grades.append(row)
 
@@ -63,6 +63,4 @@ class Data(Schedule):
 
 
 if __name__ == '__main__':
-    """Test for data.py"""
-    test_credentials = get_credentials()
-    Data(test_credentials)
+    Data()
