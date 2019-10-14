@@ -33,7 +33,7 @@ class Data(Schedule):
 
     def get_data(self, c):
         print('Reading grade books...')
-        schedule = self.mb_2019_2020
+        schedule = self.schedules['2019_2020']
         grades = []  # Array to hold the grades.
         used_ids = []  # Array to hold grade book ids.
 
@@ -62,11 +62,7 @@ class Data(Schedule):
         return data  # Pandas DataFrame
 
 
-def test():
+if __name__ == '__main__':
     """Test for data.py"""
     test_credentials = get_credentials()
     Data(test_credentials)
-
-
-if __name__ == '__main__':
-    test()
