@@ -76,7 +76,7 @@ class Data(Schedule):
     def get_data(self):
         print('Reading grade books...')
         grades = []  # Array to hold the grades.
-        course_titles = []  # Array to hold course codes.
+        course_titles = []  # Array to hold course titles.
 
         service = build('sheets', 'v4', credentials=self.credentials)  # Call the Sheets API
         sheet = service.spreadsheets()

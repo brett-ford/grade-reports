@@ -11,11 +11,11 @@ class Update:
     """Update the existing spreadsheets with the latest grade reports."""
 
     def __init__(self, d):
-        self.date = d.date
-        self.time_stamp = self.date.strftime('%Y-%m-%d %H:%M:%S')
-        self.semester = d.semester
         self.credentials = d.credentials
+        self.date = d.date
+        self.semester = d.semester
         self.student_data = d.student_data
+        self.time_stamp = self.date.strftime('%Y-%m-%d %H:%M:%S')
 
     def update_spreadsheets(self):
         """Sends a grade report to students and advisers."""
