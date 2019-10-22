@@ -1,6 +1,5 @@
 import csv
 import time
-from datetime import datetime as dt
 
 from googleapiclient.discovery import build
 
@@ -11,18 +10,17 @@ from data import Data
 class Update:
     """Update the existing spreadsheets with the latest grade reports."""
 
-    def __init__(self, data):
-        self.date = data.date
-        self.credentials = data.credentials
-        self.student_data = data.student_data
+    def __init__(self, d):
+        self.date = d.date
+        self.time_stamp = self.date.strftime('%Y-%m-%d %H:%M:%S')
+        self.semester = d.semester
+        self.credentials = d.credentials
+        self.student_data = d.student_data
 
     def update_spreadsheets(self):
         """Sends a grade report to students and advisers."""
         print('Running grade reports...')
-
-        time_stamp = self.date.strftime('%Y-%m-%d %H:%M:%S')
-        semester = self.get_semester(self.date)
-        index = (lambda i: -13 if semester == 'First' else -12)(semester)
+        index = (lambda i: -13 if self.semester == 1 else -12)(self.semester)
 
         self.new_students()  # Check for new students first
 
@@ -40,9 +38,9 @@ class Update:
             time.sleep(3)
             spreadsheet_id = existing_students[self.student_data.loc[s]['Student Email']][1]
 
-            values = [[time_stamp] +
+            values = [[self.time_stamp] +
                       self.student_data.iloc[s, :3].tolist() +
-                      [semester] +
+                      [(lambda j: 'First' if self.semester == 1 else 'Second')(self.semester)] +
                       [self.get_letter(self.student_data.iloc[s, index])] +
                       self.student_data.iloc[s, 8:].tolist()]
             body = {'values': values, 'majorDimension': 'rows'}
@@ -60,7 +58,7 @@ class Update:
 
     def new_students(self):
         """Checks data for new students."""
-        print('New students...')
+        print('Checking for new students...')
 
         # Creates list of existing students.
         existing_students = []
@@ -76,19 +74,19 @@ class Update:
 
         # Reduces student_data DataFrame to new students only.
         new_data = self.student_data[self.student_data['Student Email'].apply(mask)]
-        new = Data(df=new_data)
+        new_students = Data(df=new_data)
 
-        if len(new.student_data) > 0:
+        if len(new_students.student_data) > 0:
             print('New students found.')
-            print(new.student_data)
-            Setup(new)
+            print(new_students.student_data)
+            Setup(new_students)
         else:
-            print('No new students.')
+            print('No new students found.')
 
     @staticmethod
-    def get_letter(grade):
+    def get_letter(g):
         """Determines the letter equivalent of the current grade."""
-        grade = int(grade)
+        grade = int(g)
         letters = {range(90, 93): 'A-', range(93, 97): 'A', range(97, 110): 'A+',
                    range(80, 83): 'B-', range(83, 87): 'B', range(87, 90): 'B+',
                    range(70, 73): 'C-', range(73, 77): 'C', range(77, 80): 'C+',
@@ -100,16 +98,9 @@ class Update:
                     return letters[scale]
 
     @staticmethod
-    def get_semester(date):
-        """Determines the current semester."""
-        semester_2_start = dt(2020, 1, 22)
-        if date > semester_2_start:
-            return 'Second'
-        return 'First'
-
-    @staticmethod
     def remove_students():
         """Removes a student when they drop the course."""
+        # TODO write this function.
         # Remove sharing
         # Delete spreadsheet
         # Delete student info from storage.csv

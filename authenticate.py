@@ -11,8 +11,7 @@ class Authenticate:
     @staticmethod
     def get_credentials():
         """Returns credentials for accessing the APIs."""
-        scopes = ['https://www.googleapis.com/auth/spreadsheets',
-                  'https://www.googleapis.com/auth/drive.file']
+        scopes = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.file']
 
         credentials = None
         if os.path.exists('token.pickle'):

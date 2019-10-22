@@ -13,9 +13,9 @@ class Setup:
     Share the sheet with the student and adviser.
     Add student email, advisor email, and spreadsheet id to storage.csv
     """
-    def __init__(self, data):
+    def __init__(self, d):
         self.credentials = Authenticate.get_credentials()
-        self.run_setup(data)
+        self.run_setup(d)
 
     def run_setup(self, data):
         """Sets up a Google Sheet with column headers for each student."""

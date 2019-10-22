@@ -24,12 +24,54 @@ class Data(Schedule):
                       'Final']
 
     def __init__(self, df=None):
-        self.date = dt.today()
         self.credentials = Authenticate.get_credentials()
+        self.date = dt.today()
+        self.semester = self.get_semester()
+        self.academic_year = self.get_academic_year()
         if df is None:
+            self.periods = self.get_periods()
             self.student_data = self.get_data()
         else:
             self.student_data = df  # Pandas DataFrame
+
+    def get_semester(self):
+            """Returns current semester."""
+            s2_start = dt(2020, 1, 22)  # Semester 2 start date.
+            if self.date >= s2_start:
+                return 2
+            return 1
+
+    def get_academic_year(self):
+            """Returns academic year as a string: 2019_2020"""
+            if self.semester == 1:
+                return str(self.date.year) + '_' + str(self.date.year + 1)
+            return str(self.date.year - 1) + '_' + str(self.date.year)
+    
+    def get_periods(self):
+        """Prompts user for periods for which to seek gradebook info."""
+        user_input = input('Enter Period(s) or \'all\':')
+        active_periods = list(self.schedules[self.academic_year].keys())
+        if user_input == 'all':
+            periods = active_periods.copy()
+            print('Update Periods: {}'.format(periods))
+            return periods
+        choices = list(user_input)
+        periods = []
+        for choice in choices:
+            try:
+                p = int(choice)
+            except ValueError:
+                pass
+            else:
+                if p in active_periods:
+                    periods.append(p)
+        if periods:
+            print('Update Periods: {}'.format(periods))
+            return periods
+        else:
+            print('Invalid input.')
+            print('***** Finished *****')
+            exit()
 
     def get_data(self):
         print('Reading grade books...')
@@ -39,9 +81,9 @@ class Data(Schedule):
         service = build('sheets', 'v4', credentials=self.credentials)  # Call the Sheets API
         sheet = service.spreadsheets()
 
-        for period in self.schedules['2019_2020']:
-            title = self.schedules['2019_2020'][period]['title']  # Course title
-            gb_id = self.schedules['2019_2020'][period]['gradebook_id']  # Gradebook id
+        for period in self.periods:
+            title = self.schedules[self.academic_year][period]['title']  # Course title
+            gb_id = self.schedules[self.academic_year][period]['gradebook_id']  # Gradebook id
             if title not in course_titles:
                 try:
                     result = sheet.values().get(spreadsheetId=gb_id, range=self.ss_range).execute()
