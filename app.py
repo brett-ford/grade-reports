@@ -1,5 +1,6 @@
-#!/usr/bin/env python3
-
+#!/usr/local/bin/python3.7
+"""Previous interpretor: /usr/bin/env python3""" 
+ 
 from data import Data
 from update import Update
 
