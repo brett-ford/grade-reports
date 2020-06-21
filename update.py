@@ -85,7 +85,7 @@ class Update:
 
     @staticmethod
     def get_letter(g):
-        """Determines the letter equivalent of the current grade."""
+        """Returns the letter equivalent of the current grade."""
         grade = int(g)
         letters = {range(90, 93): 'A-', range(93, 97): 'A', range(97, 110): 'A+',
                    range(80, 83): 'B-', range(83, 87): 'B', range(87, 90): 'B+',
@@ -100,8 +100,6 @@ class Update:
     @staticmethod
     def remove_students():
         """Removes a student when they drop the course."""
-        # TODO write this function.
-        # Remove sharing
-        # Delete spreadsheet
-        # Delete student info from storage.csv
-        pass
+        # TODO Remove sharing.
+        # TODO Delete spreadsheet
+        # TODO Delete student info from storage.csv
