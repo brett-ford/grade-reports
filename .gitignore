@@ -1,9 +1,8 @@
+.DS_Store
 .vscode/
+__pycache__/
+notes/
+scr/quickstart.py
 credentials.json
-example.png
-quickstart.py
-schedule.py
 storage.csv
 token.pickle
-.idea/
-__pycache__/

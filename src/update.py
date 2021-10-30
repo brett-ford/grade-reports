@@ -1,14 +1,14 @@
 import csv
 import time
-
 from googleapiclient.discovery import build
-
 from setup import Setup
 from data import Data
 
 
 class Update:
-    """Update the existing spreadsheets with the latest grade reports."""
+    """
+    Update the existing spreadsheets with the latest grade reports.
+    """
 
     def __init__(self, d):
         self.credentials = d.credentials
