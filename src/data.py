@@ -1,14 +1,14 @@
 from datetime import datetime as dt
-
 import pandas as pd
 from googleapiclient.discovery import build
-
 from authenticate import Authenticate
 from schedule import Schedule
 
 
 class Data(Schedule):
-    """Creates a data object after reading information from the grade books."""
+    """
+    Creates a data object after reading information from the grade books.
+    """
 
     ss_range = 'Summary!B3:V40'  # Spreadsheet range
 

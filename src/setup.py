@@ -1,7 +1,5 @@
 import csv
-
 from googleapiclient.discovery import build
-
 from authenticate import Authenticate
 from data import Data
 
@@ -13,6 +11,7 @@ class Setup:
     Share the sheet with the student and adviser.
     Add student email, advisor email, and spreadsheet id to storage.csv
     """
+
     def __init__(self, d):
         self.credentials = Authenticate.get_credentials()
         self.run_setup(d)
@@ -64,8 +63,8 @@ class Setup:
                         if exception:
                             print(exception)  # Handle error.
                         else:
-                            print("Request ID: {}".format(request_id))
-                            print("Permission ID: {}".format(response.get('id')))
+                            print('Request ID: {}'.format(request_id))
+                            print('Permission ID: {}'.format(response.get('id')))
 
                     try:
                         drive_service = build('drive', 'v3', credentials=self.credentials)

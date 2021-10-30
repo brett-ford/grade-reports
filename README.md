@@ -1,12 +1,16 @@
 ## Automated Grade Reports 
 
-This project automates the process of communicating my students' grades to them. I maintain three Google Sheets files, 
-one for each course I teach, to store grades. Since it's important for students to be able to monitor their performance, 
-regular grade updates are helpful but time consuming. Previously, students needed to ask for their grades, either in,
-either in person or via email. 
+This project automates the process of communicating with students about their grades.
 
-This project allows me to send grade updates to all students by running one script. The app consists of two processes.
-The setup process reads my grade books through the Google Sheets API and creates, shares, and inserts headers for each 
-student listed in the grade book. The update process reads my grade books and inserts a new line in each student's sheet. 
-The update includes the student's current grade in addition to all significant milestone grades such as quarter and
+I use Google Sheets to record grades. one file per course. It's important for students to receive regular feedback, both qualitative and quantitative. Exchanging feedback is time consuming and prone to miscommunication. To solve this problem, I developed this project so that each student would have their own grade record accessible on their Google Drive account. 
+
+The app consists of two processes.
+
+1) The setup process is run at the benning of a school year to create the necessary files for each student. It reads students' names and other pertinent information from my grade books via the Google Sheets API. It then creates a Google Sheet with the necessary headers for each student and shares the sheet with the student's school Google Drive account. It also shares the sheet with the student's advisor. 
+
+2) When run, the update process reads my grade books and inserts a new line in each student's sheet. The update includes the student's current grade in addition to all significant milestone grades such as quarter and
 semester grades.
+
+Students' Google Sheet IDs are stored in a csv file with their school email address as a primary key. Their advisor's email address is also included on the record. 
+
+Students can check their grades any time. If they agree with the assessment, then no student-teacher communication is necessary. If not, then we can work together to resolve the discrepancy. 
