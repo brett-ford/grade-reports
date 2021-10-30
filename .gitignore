@@ -2,7 +2,7 @@
 .vscode/
 __pycache__/
 notes/
-scr/quickstart.py
+src/quickstart.py
 credentials.json
 storage.csv
 token.pickle
